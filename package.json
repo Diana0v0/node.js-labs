@@ -8,7 +8,8 @@
     "lint": "eslint --ignore-path .gitignore .",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --ignore-path .gitignore --check .",
-    "format:fix": "prettier --ignore-path .gitignore --write ."
+    "format:fix": "prettier --ignore-path .gitignore --write .",
+    "validate": "npm ls"
   },
   "keywords": [],
   "author": "",
@@ -20,9 +21,16 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.3.0",
     "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-sonarjs": "^0.16.0"
+    "eslint-plugin-sonarjs": "^0.16.0",
+    "husky": "^8.0.1",
+    "pre-commit": "^1.2.2"
   },
   "dependencies": {
+    "precommit-hook": "^3.0.0",
     "prettier": "2.7.1"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "validate"
+  ]
 }
