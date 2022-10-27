@@ -13,4 +13,3 @@ jobs:
       - run: npm ci
       - run: npm run format
       - run: npm run lint
-
