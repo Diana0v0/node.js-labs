@@ -1,15 +1,9 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "./hello_world.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/hello_world.js"
+      "source": "/(.*)",
+      "destination": "/hello_world.js"
     }
   ]
 }
