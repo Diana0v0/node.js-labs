@@ -36,6 +36,7 @@
     "pre-commit": "^1.2.2"
   },
   "dependencies": {
+    "next": "^13.0.1-canary.2",
     "precommit-hook": "^3.0.0",
     "prettier": "2.7.1"
   },
