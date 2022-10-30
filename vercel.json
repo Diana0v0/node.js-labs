@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "functions/hello_world.js",
+      "src": "./index.js",
       "use": "@vercel/node"
     }
   ],
@@ -11,5 +11,8 @@
       "src": "/(.*)",
       "dest": "/"
     }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/functions/hello_world.js" }
   ]
 }
