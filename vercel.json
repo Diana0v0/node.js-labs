@@ -2,8 +2,8 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/functions/(.*)",
-      "destination": "/hello_world.js"
+      "source": "/functions/(*)",
+      "destination": "hello_world.js"
     }
   ]
 }
