@@ -17,10 +17,14 @@ const processedContentTypes = {
   },
 };
 
+const connections = new Map();
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url || "/", `https://${req.headers.host}`);
   const routerModule = router.get(url.pathname) ?? {};
   const handler = routerModule[req?.method] ?? defaultHandler;
+
+  connections.set(res.connection, res);
 
   let payload = {};
   let rawRequest = "";
@@ -48,13 +52,54 @@ const server = http.createServer(async (req, res) => {
 server.on("clientError", (err, socket) => {
   socket.end("HTTP/1.1 400 bad request\r\n\r\n");
 });
+
+server.on("connection", (connection) => {
+  console.log("New connection");
+  connection.on("close", () => {
+    console.log("Close connection");
+    connections.delete(connection);
+  });
+});
+
 server.listen(parseInt(process.env.PORT) || 8000);
 
-process.on("SIGINT", () => {
+const showConnections = () => {
+  console.log("Connection:", [...connections.values()].length);
+  for (const connection of connections.keys()) {
+    const { remoteAddress, remotePort } = connection;
+    console.log(` ${remoteAddress}:${remotePort}`);
+  }
+};
+
+const closeConnections = () => {
+  for (const [connection, res] of connections.entries()) {
+    connections.delete(connection);
+    res.end("Server stopped");
+    connection.destroy();
+  }
+};
+
+const freeResources = async () => {
+  console.log("Free resources");
+};
+
+const gracefulShutdown = async () => {
   server.close((error) => {
     if (error) {
-      console.error(error);
+      console.log(error);
       process.exit(1);
     }
   });
+  await freeResources();
+  await closeConnections();
+};
+
+process.on("SIGINT", async () => {
+  console.log();
+  console.log("Graceful shutdown");
+  showConnections();
+  await gracefulShutdown();
+  showConnections();
+  console.log("Server closed");
+  process.exit(0);
 });
