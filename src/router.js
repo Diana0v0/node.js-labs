@@ -15,7 +15,6 @@ async function loadRoutesDir(dirName, base) {
 
   const dir = await readdir(workDir, { withFileTypes: true });
   for (const dirent of dir) {
-    console.log(dirName);
     if (dirent.isDirectory()) {
       return loadRoutesDir(dirent.name, path.join(base, dirName));
     } else if (

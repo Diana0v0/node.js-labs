@@ -1,13 +1,13 @@
 function GET(req, res) {
-  res.json({ text: "branch-2 get" });
+  res.json({ text: "test1 get" });
 }
 
 function OPTIONS(req, res) {
-  res.json({ text: "branch-2 options" });
+  res.json({ text: "test1 options" });
 }
 
 function POST(req, res) {
-  res.json({ text: "branch-2 post" });
+  res.json({ text: "test1 post" });
 }
 
 export { GET, OPTIONS, POST };
