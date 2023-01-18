@@ -19,7 +19,7 @@ const processedContentTypes = {
 
 const connections = new Map();
 
-const index = http.createServer(async (req, res) => {
+const server = http.createServer(async (req, res) => {
   const url = new URL(req.url || "/", `https://${req.headers.host}`);
   const routerModule = router.get(url.pathname) ?? {};
   const handler = routerModule[req?.method] ?? defaultHandler;
@@ -49,11 +49,11 @@ const index = http.createServer(async (req, res) => {
 });
 
 // eslint-disable-next-line n/handle-callback-err
-index.on("clientError", (err, socket) => {
+server.on("clientError", (err, socket) => {
   socket.end("HTTP/1.1 400 bad request\r\n\r\n");
 });
 
-index.on("connection", (connection) => {
+server.on("connection", (connection) => {
   console.log("New connection");
   connection.on("close", () => {
     console.log("Close connection");
@@ -61,7 +61,7 @@ index.on("connection", (connection) => {
   });
 });
 
-index.listen(parseInt(process.env.PORT) || 8000);
+server.listen(parseInt(process.env.PORT) || 8000);
 
 const showConnections = () => {
   console.log("Connection:", [...connections.values()].length);
@@ -84,7 +84,7 @@ const freeResources = async () => {
 };
 
 const gracefulShutdown = async () => {
-  index.close((error) => {
+  server.close((error) => {
     if (error) {
       console.log(error);
       process.exit(1);
